@@ -1,0 +1,176 @@
+# vim: syntax=config
+
+## mouse control
+#MOUSE_BTN3 add volume 2
+#MOUSE_BTN4 add volume -2
+WHEEL_UP seek -1
+WHEEL_DOWN seek 1
+#WHEEL_UP      seek 10
+#WHEEL_DOWN    seek -10
+#WHEEL_LEFT    add volume -2
+#WHEEL_RIGHT   add volume 2
+#MBTN_LEFT     ignore              # don't do anything
+#MBTN_LEFT_DBL cycle fullscreen    # toggle fullscreen on/off
+#MBTN_RIGHT    cycle pause         # toggle pause on/off
+MBTN_RIGHT_DBL quit
+
+Shift+WHEEL_UP add volume 2
+Shift+WHEEL_DOWN add volume -2
+WHEEL_LEFT playlist-prev ; show-text "${playlist-pos-1}/${playlist-count}"
+WHEEL_RIGHT playlist-next ; show-text "${playlist-pos-1}/${playlist-count}"
+ALT+WHEEL_UP playlist-prev ; show-text "${playlist-pos-1}/${playlist-count}"
+ALT+WHEEL_DOWN playlist-next ; show-text "${playlist-pos-1}/${playlist-count}"
+
+## base
+ESC quit
+; quit
+#f cycle fullscreen
+ENTER cycle fullscreen
+c cycle mute
+DEL cycle mute
+p cycle osd-bar
+P show-progress
+q quit-watch-later
+t cycle ontop
+
+## OSC
+TAB script-binding osc/visibility
+o script-binding osc/visibility
+O no-osd cycle-values osd-level 3 1
+
+y script-message osc-visibility always ; set osd-bar no
+h script-message osc-visibility never ; set osd-bar yes
+
+## seeking
+j seek 3
+k seek -3
+n seek 15
+m seek -15
+Alt+m seek -9999
+RIGHT seek 3
+LEFT seek -3
+Ctrl+LEFT   seek -15
+Ctrl+RIGHT  seek  15
+
+ALT+.  frame-step ; show-text "Frame: ${estimated-frame-number} / ${estimated-frame-count}"
+ALT+,  frame-back-step ; show-text "Frame: ${estimated-frame-number} / ${estimated-frame-count}"
+Shift+RIGHT  frame-step ; show-text "frame: ${estimated-frame-number} / ${estimated-frame-count}"
+Shift+LEFT   frame-back-step ; show-text "frame: ${estimated-frame-number} / ${estimated-frame-count}"
+
+PGUP add chapter -1
+PGDWN add chapter 1
+
+## ab-loop and toggle loop
+l      cycle-values loop-file yes no ; show-text "${?=loop-file==yes:Looping enabled (file)}${?=loop-file==no:Looping disabled (file)}"
+L      cycle-values loop-playlist yes no ; show-text "${?=loop-playlist==inf:Looping enabled}${?=loop-playlist==no:Looping disabled}"
+Ctrl+l ab-loop
+
+
+## playlists/next file
+## / deinfed in playlistmanager.lua
+#/ script-message osc-playlist 9
+#/ show_text ${playlist} 9000
+
+, playlist-prev ; show-text "${playlist-pos-1}/${playlist-count}"
+. playlist-next ; show-text "${playlist-pos-1}/${playlist-count}"
+
+Ctrl+PGDWN playlist-next
+Ctrl+PGUP playlist-prev
+
+## speed
+\      cycle-values speed "1.75" "2" 
+a      cycle-values speed "1" "1.25" 
+s      cycle-values speed "1.5" "1.5" 
+d      cycle-values speed "1.75" "1.75"
+f      cycle-values speed "2" "2.25"
+g      cycle-values speed "2.5" "2.5"
+ALT+x  set speed 1.0
+]      add speed +0.5
+[      add speed -0.5
+##[ multiply speed 1/1.1
+##] multiply speed 1.1
+##{ multiply speed 0.5
+##} multiply speed 2.0
+##BS set speed 1.0
+
+## volume
+UP add volume 2
+DOWN add volume -2
+
+
+## window-scale
+w     cycle-values window-scale "1.5" "2.0" "0.5" "1.0" ; show-text "Scale: ${window-scale}"
+Alt+w set window-scale "1.0" ; show-text "Scale: ${window-scale}"
+
+Alt+1 set window-scale "1.0" ; show-text "Scale: ${window-scale}"
+Alt+2 set window-scale "0.5" ; show-text "Scale: ${window-scale}"
+Alt+3 set window-scale "2.0" ; show-text "Scale: ${window-scale}"
+
+
+## video aspect ratios; "-1" is the container aspect
+e cycle-values video-aspect "16:9" "4:3" "2.35:1" "-1"
+F7 cycle-values video-aspect "16:9" "4:3" "2.35:1" "-1"
+
+## Zoom/unzoom video
+Alt+=     add video-zoom   0.1
+Alt+-     add video-zoom  -0.1
+Alt+left  add video-pan-x  0.1
+Alt+right add video-pan-x -0.1
+Alt+up    add video-pan-y  0.1
+Alt+down  add video-pan-y -0.1
+## Reset video zoom/pan settings
+Alt+BS set video-zoom 0 ; set video-pan-x 0 ; set video-pan-y 0
+
+## subtitles
+z cycle sub                            # cycle through subtitles
+Z cycle sub down                       # ...backwards
+r add sub-pos -1                       # move subtitles up
+R add sub-pos +1                       #                down
+
+Ctrl+[   sub-seek -1                   # seek by one sub
+Ctrl+]   sub-seek  1
+
+Alt+[ sub-step -1            # first locate the sub
+Alt+] sub-step 1
+##Ctrl+Shift+LEFT sub-step -1            # first locate the sub
+##Ctrl+Shift+RIGHT sub-step 1
+
+- add sub-delay -0.1                   # then adjust subtract 100 ms delay from subs
+= add sub-delay +0.1                   # add
+#Ctrl+_ add sub-delay -0.1              # then adjust subtract 100 ms delay from subs
+#Ctrl++ add sub-delay +0.1              # add
+
+
+## audio
+ctrl+= add audio-delay 0.100           # 应对声音不同步
+ctrl+- add audio-delay -0.100
+
+## screenshots
+x no-osd screenshot ; show-text "screenshot done"
+F5 no-osd screenshot video                     # ...without subtitles
+Shift+F5 no-osd screenshot                     # take a screenshot
+Ctrl+Shift+F5 no-osd screenshot window         # ...with subtitles and OSD, and scaled
+
+## boss key
+b set pause yes ; set window-minimized "yes"
+B set window-minimized "yes"      # caps+space 
+
+#alt+j script-message Cycle_Video_Rotate -90
+#alt+r script-message Cycle_Video_Rotate 90
+
+
+## adjust
+##1 add contrast -1
+##2 add contrast 1
+##3 add brightness -1
+##4 add brightness 1
+##5 add gamma -1
+##6 add gamma 1
+##7 add saturation -1
+##8 add saturation 1
+##9 add volume -2
+##0 add volume 2
+
+## use ctrl+D or esc close console
+
+
